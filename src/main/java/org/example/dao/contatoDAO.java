@@ -13,7 +13,7 @@ import java.util.List;
 public class contatoDAO {
     public void inserirContato(Contato contato) throws SQLException {
         String query = "INSERT INTO contato" +
-                "(nome,telefone,email,observacao)" +
+                "(telefone,nome,email,observacao)" +
                 "VALUES" +
                 "(?,?,?,?)";
         try (Connection conn = conexao.conectar()
@@ -105,6 +105,20 @@ public class contatoDAO {
 
             System.out.println("Email atualizado com sucesso!");
         }
+    }
+    public List<Contato> deletar(int id) throws SQLException{
+String query = "DELETE FROM contato " +
+        "where " + "id = ?";
+    try(Connection conn = conexao.conectar();
+    PreparedStatement stmt = conn.prepareStatement(query)){
+        stmt.setInt(1,id);
+        stmt.executeUpdate();
+    }catch (SQLException e){
+        e.printStackTrace();
+    }
+
+
+        return null;
     }
 
 }

@@ -12,12 +12,12 @@ import java.util.Scanner;
 public class Main {
     static Scanner input = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         inicio();
     }
 
-    public static void inicio() {
+    public static void inicio() throws SQLException {
         boolean sair = false;
         System.out.println("======================Lista Telefonica====================== \n" +
                 "1. Cadastrar contato: Nome, Telefone, Email, Observação. \n" +
@@ -47,6 +47,9 @@ public class Main {
                 atualizarContato();
                 break;
             }
+            case 5:{
+                deletarContato();
+            }
             case 6: {
                 sair = true;
                 break;
@@ -71,7 +74,7 @@ public class Main {
         System.out.println("Digite a observação:");
         String observacao = input.nextLine();
 
-        var contato = new Contato(nome, telefone, email, observacao);
+        var contato = new Contato( nome,telefone, email, observacao);
         var dao = new contatoDAO();
 
 
@@ -116,7 +119,7 @@ public class Main {
 
         var dao = new contatoDAO();
         try {
-            List<Contato> contatos = dao. buscarContatoPorNome(nome);
+            List<Contato> contatos = dao.buscarContatoPorNome(nome);
          exibirContatos(contatos);
         } catch (SQLException e) {
             System.out.println("Erro de execução ");
@@ -200,5 +203,28 @@ public class Main {
             }
         }
     }
+
+    public static int deletarContato() throws SQLException {
+        System.out.println("--- Deletar Contato ---");
+        var dao = new contatoDAO();
+
+        List<Contato> contatos = dao.listarContato();
+        exibirContatos(contatos);
+
+        System.out.println("Digite o id do contato que deseja deletar");
+        int id = input.nextInt();
+
+        try {
+            dao.deletar(id);
+            System.out.println("Contato deletado com sucesso");
+        } catch (SQLException erro) {
+            erro.printStackTrace();
+        }
+
+        return id;
+    }
+
+
+
     }
 
